@@ -8,8 +8,7 @@ This project implements, simulates, and analyzes an exact resolution method for 
 - [Features](#features)
 - [Implementation](#implementation)
 - [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
+
 
 ## Introduction
 The Tower of Hanoi is a mathematical puzzle consisting of three rods and a number of disks of different sizes which can be moved onto any rod. The objective is to move the entire stack to another rod, obeying the following rules:
