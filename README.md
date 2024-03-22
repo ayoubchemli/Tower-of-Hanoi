@@ -1,5 +1,4 @@
 # 2nd-year-project
-# Tower of Hanoi Solver
 
 ## Description
 This project implements, simulates, and analyzes an exact resolution method for the Tower of Hanoi problem, which is a classic problem in computer science. The project is aimed at studying the algorithmic complexity of solving the Tower of Hanoi problem.
@@ -32,4 +31,4 @@ The Tower of Hanoi is a mathematical puzzle consisting of three rods and a numbe
 ## Usage
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/tower-of-hanoi.git
+   git clone https://github.com/your-username/2nd-year-project
