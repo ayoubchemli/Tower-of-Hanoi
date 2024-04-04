@@ -58,9 +58,11 @@ void afficherPiquets(Pile *p1, Pile *p2, Pile *p3) {
 }
 
 //la resolution des tours d'hanoi 
-void resolutionIteratif(Pile *p1, Pile *p2, Pile *p3, int n) {
+void resolutionIteratif(Pile *p1, Pile *p2, Pile *p3, int n,char T[]) {
    int indic = 0;
-
+   //on  calcule pas dabs la complexité les instructions qui contiennent le T[] car il ont une relation avec le graphic et non pas la resolution
+   int k = 0 ;// X
+   
     // Parité de n
     if (n % 2 == 0) {
         indic = 1; // Si le nombre de disques est pair
@@ -80,22 +82,34 @@ void resolutionIteratif(Pile *p1, Pile *p2, Pile *p3, int n) {
     
                 if (!vide(p1) && (vide(p2) || sommet(p1) < sommet(p2))) {
                     empiler(p2, depiler(p1));
+                    T[k] = 'A' ;//X
+                    T[k+1] = 'B';//X
                 } else {
                     empiler(p1, depiler(p2));
+                    T[k] = 'B' ;//X 
+                    T[k+1] = 'A';//X
                 }
             } else if (i % 3 == 1) {
                 
                 if (!vide(p1) && (vide(p3) || sommet(p1) < sommet(p3))) {
                     empiler(p3, depiler(p1));
+                    T[k] = 'A' ;//X 
+                    T[k+1] = 'C';//X
                 } else {
                     empiler(p1, depiler(p3));
+                    T[k] = 'C' ;//X 
+                    T[k+1] = 'A';//X
                 }
             }else {
                 
                 if (!vide(p2) && (vide(p3) || sommet(p2) < sommet(p3))) {
                     empiler(p3, depiler(p2));
+                    T[k] = 'B' ;//X 
+                    T[k+1] = 'C';//X
                 } else {
                     empiler(p2, depiler(p3));
+                    T[k] = 'C' ;//X 
+                    T[k+1] = 'B';//X
                 }
             }
         }
@@ -105,25 +119,38 @@ void resolutionIteratif(Pile *p1, Pile *p2, Pile *p3, int n) {
                 
                 if (!vide(p1) && (vide(p3) || sommet(p1) < sommet(p3))) {
                     empiler(p3, depiler(p1));
+                    T[k] = 'A' ;//X 
+                    T[k+1] = 'C';//X
                 } else {
                     empiler(p1, depiler(p3));
+                    T[k] = 'C' ;//X 
+                    T[k+1] = 'A';//X
                 }
             } else if (i % 3 == 1) {
                 
                 if (!vide(p1) && (vide(p2) || sommet(p1) < sommet(p2))) {
                     empiler(p2, depiler(p1));
+                    T[k] = 'A' ;//X 
+                    T[k+1] = 'B';
                 } else {
                     empiler(p1, depiler(p2));
+                    T[k] = 'B' ;//X 
+                    T[k+1] = 'A';//X
                 }
             } else {
                 
                 if (!vide(p3) && (vide(p2) || sommet(p3) < sommet(p2))) {
                     empiler(p2, depiler(p3));
+                    T[k] = 'C' ;//X 
+                    T[k+1] = 'B';//X
                 } else {
                     empiler(p3, depiler(p2));
+                    T[k] = 'B' ;//X 
+                    T[k+1] = 'C';//X
                 }
             }
         }
+        k=k+2;
         printf("déplacement numéro :  %d \n", i+1); 
         afficherPiquets(p1, p2, p3);
         printf("-------------------\n");
@@ -163,6 +190,8 @@ int main() {
     printf("Saisir le nombre de disques : ");
     scanf("%d", &n);   
     } while (n<=0);
+
+    char T[((1<<n)-1)*2-1];
     
     //l'initialisation des piles
     Pile p1, p2, p3;
@@ -182,7 +211,7 @@ int main() {
     
     //pour calculer le temp de la résolution 
     start=clock();   
-    resolutionIteratif(&p1, &p2, &p3, n);
+    resolutionIteratif(&p1, &p2, &p3, n,T);
     end=clock();
     float time=(float)(end-start)/CLOCKS_PER_SEC;
     printf("\t\tLe temps d'execution est : %f\n\n",time);
@@ -196,6 +225,18 @@ int main() {
     {
     printf("les tours de hanoi ne  sont pas  résolues , vérification terminée.");
     }
+ 
+    printf("\n[");
+    for (int i =0;i<(1<<n)*2-2;i++)
+    {
+        
+        printf("%c",T[i]);
+        if ((i<(1<<n)*2-3))
+        {
+        printf(",");
+        }
+    }
+    printf("]");
     return 0;
 
 }
