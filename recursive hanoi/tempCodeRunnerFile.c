@@ -2,109 +2,125 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-// Definition de la structure pour la pile
+
+//la déclaration de la structure pile 
 typedef struct {
     int *pile;
     int sommet;
 } Pile;
 
-// Fonction pour initialiser la pile
+// les fonctions élémentaires 
 void initPile(Pile *p, int n) {
     p->pile = (int*) malloc(n * sizeof(int));
-    if (p->pile == NULL) {
-        printf("Echec de l'allocation memoire\n");
-        exit(EXIT_FAILURE);
-    }
     p->sommet = -1;
 }
 
-// Fonction pour verifier si la pile est vide
 int vide(Pile *p) {
     return p->sommet == -1;
 }
 
-// Fonction pour retourner le sommet de la pile
 int sommet(Pile *p) {
     return p->pile[p->sommet];
 }
 
-// Fonction pour empiler un element sur la pile
 void push(Pile *p, int x) {
+    
     p->pile[++(p->sommet)] = x;
 }
 
-// Fonction pour depiler un element de la pile
 int pop(Pile *p) {
+   
     return p->pile[(p->sommet)--];
 }
 
-// Fonction pour afficher la pile
 void afficherPile(Pile *p) {
-    for (int i = 0; i <= p->sommet; i++) {
+    for(int i = 0; i <= p->sommet ; i++) {
         printf("%d ", p->pile[i]);
     }
     printf("\n");
 }
 
-// Fonction pour remplir la pile avec des nombres de n a 1
+//remplissage d'un piquet
 void remplir(Pile *p, int n) {
-    for (int i = n; i >= 1; i--) {
+    for(int i = n; i >= 1; i--) {
         push(p, i);
     }
 }
 
-// Fonction pour resoudre le probleme de la Tour de Hanoi
-void hanoi(int n, char source, char auxiliary, char destination, char finalDestination, Pile *pile) {
+
+void hanoi(int n, char source, char auxiliary, char destination, char finalDestination, Pile pile) {
     if (n == 1) {
         printf("Deplacer le disque 1 de %c vers %c\n", source, destination);
-        if (destination == finalDestination) {
-            push(pile, n);
-        } else if (source == finalDestination) {
-            pop(pile);
-        }
+
+        if(destination == finalDestination ){
+            push(&pile, n);
+        } else if (source == finalDestination)
+        {
+            pop(&pile);
+    }
+
         return;
     }
+
     hanoi(n - 1, source, destination, auxiliary, finalDestination, pile);
     printf("Deplacer le disque %d de %c vers %c\n", n, source, destination);
-    if (destination == finalDestination) {
-        push(pile, n);
-    } else if (source == finalDestination) {
-        pop(pile);
+
+    if(destination == finalDestination ){
+        push(&pile, n);
+    } else if (source == finalDestination)
+    {
+        pop(&pile);
     }
+    
+
     hanoi(n - 1, auxiliary, source, destination, finalDestination, pile);
 }
 
-// Fonction pour verifier la solution
-bool verification(int n, Pile *pile) {
+bool verification(int n, Pile pile){
+
+    int a,b;
     int count = 0;
-    while (!vide(pile)) {
-        int a = pop(pile);
-        count++;
-        if (!vide(pile) && a > sommet(pile)) {
-            printf("Solution invalide\n");
+    
+    printf("%d \n",sommet(&pile));
+    while(sommet(&pile) != -1 ){
+        printf("%d \n",count);
+        a = pop(&pile) ;
+        count ++ ;
+        b = sommet(&pile);
+        if (a > b){
+            printf("solution invalide");
             return false;
         }
     }
-    if (count != n) {
-        printf("Solution invalide\n");
+    printf("hmmmmmmmm \n");
+    printf("%d hmmmm \n",count);
+    if (count != n)
+    {
+        printf("solution invalide");
         return false;
+
     }
-    printf("Solution valide\n");
+
+    printf("solution valide");
     return true;
 }
 
 int main() {
+
     Pile pile;
+    
     int n;
 
     printf("Entrez le nombre de disques : ");
     scanf("%d", &n);
 
     initPile(&pile, n);
-    hanoi(n, 'A', 'B', 'C', 'C', &pile);
-    verification(n, &pile);
 
-    free(pile.pile); // Liberer la memoire allouee dynamiquement
+    hanoi(n, 'A', 'B', 'C', 'C', pile);
+
+    verification(n,pile);
+
+    
     return 0;
 }
 
