@@ -56,12 +56,12 @@ void afficherPiquets(Pile *p1, Pile *p2, Pile *p3) {
     printf("C : ");
     afficherPile(p3);
 }
+/*****Présentation de l'algorithme de la résolution*******/
 
 //la resolution des tours d'hanoi 
 void resolutionIteratif(Pile *p1, Pile *p2, Pile *p3, int n,char T[]) {
    int indic = 0;
-   //on  calcule pas dabs la complexité les instructions qui contiennent le T[] car il ont une relation avec le graphic et non pas la resolution
-   int k = 0 ;// X
+  
    
     // Parité de n
     if (n % 2 == 0) {
@@ -82,34 +82,22 @@ void resolutionIteratif(Pile *p1, Pile *p2, Pile *p3, int n,char T[]) {
     
                 if (!vide(p1) && (vide(p2) || sommet(p1) < sommet(p2))) {
                     empiler(p2, depiler(p1));
-                    T[k] = 'A' ;//X
-                    T[k+1] = 'B';//X
                 } else {
                     empiler(p1, depiler(p2));
-                    T[k] = 'B' ;//X 
-                    T[k+1] = 'A';//X
                 }
             } else if (i % 3 == 1) {
                 
                 if (!vide(p1) && (vide(p3) || sommet(p1) < sommet(p3))) {
                     empiler(p3, depiler(p1));
-                    T[k] = 'A' ;//X 
-                    T[k+1] = 'C';//X
                 } else {
                     empiler(p1, depiler(p3));
-                    T[k] = 'C' ;//X 
-                    T[k+1] = 'A';//X
                 }
             }else {
                 
                 if (!vide(p2) && (vide(p3) || sommet(p2) < sommet(p3))) {
                     empiler(p3, depiler(p2));
-                    T[k] = 'B' ;//X 
-                    T[k+1] = 'C';//X
                 } else {
                     empiler(p2, depiler(p3));
-                    T[k] = 'C' ;//X 
-                    T[k+1] = 'B';//X
                 }
             }
         }
@@ -119,45 +107,94 @@ void resolutionIteratif(Pile *p1, Pile *p2, Pile *p3, int n,char T[]) {
                 
                 if (!vide(p1) && (vide(p3) || sommet(p1) < sommet(p3))) {
                     empiler(p3, depiler(p1));
-                    T[k] = 'A' ;//X 
-                    T[k+1] = 'C';//X
                 } else {
                     empiler(p1, depiler(p3));
-                    T[k] = 'C' ;//X 
-                    T[k+1] = 'A';//X
                 }
             } else if (i % 3 == 1) {
                 
                 if (!vide(p1) && (vide(p2) || sommet(p1) < sommet(p2))) {
                     empiler(p2, depiler(p1));
-                    T[k] = 'A' ;//X 
-                    T[k+1] = 'B';
                 } else {
                     empiler(p1, depiler(p2));
-                    T[k] = 'B' ;//X 
-                    T[k+1] = 'A';//X
                 }
             } else {
                 
                 if (!vide(p3) && (vide(p2) || sommet(p3) < sommet(p2))) {
                     empiler(p2, depiler(p3));
-                    T[k] = 'C' ;//X 
-                    T[k+1] = 'B';//X
                 } else {
                     empiler(p3, depiler(p2));
-                    T[k] = 'B' ;//X 
-                    T[k+1] = 'C';//X
                 }
             }
         }
-        k=k+2;
         printf("déplacement numéro :  %d \n", i+1); 
         afficherPiquets(p1, p2, p3);
         printf("-------------------\n");
     }
 }
 
-int pileDecroissant(Pile *p) {
+        /*Calcul de la complexité théorique de la fonction résolution itératif*/
+/*
+ int indic = 0 ;  -> 1 op (affectation)
+ -------------------------------------------
+  if (n % 2 == 0) -> 2 op ( opération du mod + comparaison du résultat avec le 0)
+   {
+        indic = 1;  -> 1 op (affectation)
+    } else {
+        indic = -1; 
+    } 
+    les deux blocs sont équivalents dans le nombre d'instructions , donc on choisit l'un des deux
+    => 3 op dans le total
+---------------------------------------------
+ int deplacementMin = (1<<n)-1; -> n+2 op (1<<n ( n opération de décalage de bits + l'inititalisation à 1 ) + 1<<n -1 (soustraction)) 
+ --------------------------------------------
+ le calcul du complexité de la boucle for (int i = 0; i < deplacementMin; i++) : 
+
+
+ 1. le calcul de nombre d'itérations 
+ nb d'itérations = ( deplacementMin -1 - 0 +1 )/1 = deplacementMin = (2^n) - 1
+
+
+ 2.le calcul du nombre de comparaisons 
+ int i = 0 -> 1op 
+ 2^n -1 comparaison + la comparaison de la sortie de la boucle pour => 2^n comparaison
+ i <- i+ 1 ; 2op (addition + affectation) => le total égale à 2*((2^n)-1) = 2^(n+1) - 2
+
+
+ 3.le calcul de la complexité du plus grand bloc if else (if indic == 1)
+ on remarque que les deux blocs sont équivalents dans le nombre d'instructions donc choisit l'un des deux blocs
+ => calcul de la complexité du bloc if 
+
+ if (indic == 1 ) => 1op (comparaison)
+ on a 3 blocs , le bloc de if (i%3==0) , aprés le bloc else if (i%3==1),aprés le bloc else (i%3==2)
+ tous les blocs ont le même nombre d'opérations , donc on choisit l'un des blocs
+ => le bloc if (i%3==0)
+
+
+ ---> calcul de la complexité du bloc if(i%3==0)
+ if (i%3==0) -> 2op (le mod + la comparaison avec le zéro)
+ on a deux blocs , le bloc if et le bloc else , les deux blocs ont le même nombre d'instructions 
+ donc on choisit l'un des deux blocs => bloc if 
+
+  if (!vide(p1) && (vide(p2) || sommet(p1) < sommet(p2))) --> 
+ 1....sommet (p1) -> 1 op (on accede au sommet du pile p1 et on le retourne)
+ 2....sommet (p2) -> 1 op (on accede au sommet du pile p2 et on le retourne)
+ 3.... sommet (p1) < sommet(p2) -> 1op (comparaison)
+ 4.... (vide (p2) <=> vide (p2)== 1) -> 2op (comparaison du sommet du pile avec le - 1 aprés comparaison du retour de fonction avec 1 )
+ 5....  4||3 -> 1 op (opération du ou)
+ 6....(!vide(p2)<=>vide(p2)!=1) -> 2op (comparaison du sommet du pile avec le - 1 aprés comparaison du retour de fonction avec 1 )
+ 7.... 6&&5 -> 1op (opération du et )
+
+
+  empiler(p2, depiler(p1)) -> 
+  dépiler(p1)-> 1op (accés a la pile et décrementation du sommet)
+  empiler(p2,dépiler(p1))-> 2op (accés a la pile et incrémentation du sommet + affectation du résultat de dépilement du p2)
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+- le total = 1 + 3 + n+2 + 1 + 2^n + (2^(n+1))-2  + ((2^n)-1)*(1+2+1+1+1+2+1+2+1+1+2) = 5+n+(2^n)+2^(n+1)+15*(2^n)-15 = 2^(n+1) + 16*(2^n) - 10 +n = (2^n)*(18) - 10 + n-                 
+- comme 2^n > n quelque soit n>=0 donc on garde seulement le plus grand coefficient qui est 2^n ce qui implique que la complexité égale à O(2^n)                        -
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
+*/
+int pileDecroissante(Pile *p) {
     int x = depiler(p);
     while (p->sommet != -1) {
         int next = depiler(p);
@@ -172,7 +209,7 @@ int pileDecroissant(Pile *p) {
 // la fonction de la vérification 
 int verif_iterative(Pile A,Pile B,Pile C)
 {
-    if (vide(&A)&&vide(&B)&&pileDecroissant(&C))
+    if (vide(&A)&&vide(&B)&&pileDecroissante(&C))
     {
         return 1 ;
     }
@@ -180,8 +217,21 @@ int verif_iterative(Pile A,Pile B,Pile C)
     {
         return -1 ; 
     }
-
 }
+/***********pseudo code***************/
+/*
+Fonction verif_iterative(Pile A,Pile B,Pile C):entier
+
+Début
+si ((vide(A)=1)et(vide(B)=1)et(pileDecroissante(C)=1) alors
+    retourner (1) ; 
+sinon 
+    retourner (-1);
+Fsi;
+
+Fin.
+
+*/
 
 int main() {
     int n;
@@ -225,18 +275,5 @@ int main() {
     {
     printf("les tours de hanoi ne  sont pas  résolues , vérification terminée.");
     }
- 
-    printf("\n[");
-    for (int i =0;i<(1<<n)*2-2;i++)
-    {
-        
-        printf("%c",T[i]);
-        if ((i<(1<<n)*2-3))
-        {
-        printf(",");
-        }
-    }
-    printf("]");
     return 0;
-
 }
