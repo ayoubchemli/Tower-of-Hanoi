@@ -59,7 +59,7 @@ void afficherPiquets(Pile *p1, Pile *p2, Pile *p3) {
 /*****Présentation de l'algorithme de la résolution*******/
 
 //la resolution des tours d'hanoi 
-void resolutionIteratif(Pile *p1, Pile *p2, Pile *p3, int n,char T[]) {
+void resolutionIteratif(Pile *p1, Pile *p2, Pile *p3, int n) {
    int indic = 0;
   
    
@@ -218,6 +218,8 @@ int verif_iterative(Pile A,Pile B,Pile C)
         return -1 ; 
     }
 }
+
+
 /***********pseudo code***************/
 /*
 Fonction verif_iterative(Pile A,Pile B,Pile C):entier
@@ -233,6 +235,42 @@ Fin.
 
 */
 
+/*******Complexité théorique************/
+/*Calculons la complexité du bloc if else 
+if (vide(&A)&&vide(&B)&&pileDecroissante(&C))
+{
+return 1;}
+->
+1.... (vide (&A) <=> vide (&A)== 1) -> 2op (comparaison du sommet du pile avec le - 1 aprés comparaison du retour de fonction avec 1 )
+2.... (vide(&B) <=> vide (&B)== 1) -> 2op (comparaison du sommet du pile avec le - 1 aprés comparaison du retour de fonction avec 1 )
+3.... deux opération du et -> 2op
+4....calcul de la complexité de la fonction (pileDecroissante(&C))->
+---int x = depiler(p) -> 1op (accés a la pile et décrementation du sommet)
+---while (p->sommet!=-1) <=> while (!vide(p)) donc on a pas dépiler tous les n éléments de la pile ce qui implique que le nombre d'itérations égale à n 
+-> calcul de la complexité de la boucle while 
+(n+1) vérification de (p->sommet!=-1) 
+int next = dépiler(p) -> 1op * n 
+le pire cas c'est que chaque fois le next > x donc :
+x = next -> 1op * n 
+return 1 -> 1op 
+
+=> le total = 1+n+1+n+n+1 = 3n+3 
+
+5. return 1 ; -> 1op 
+donc la complexité du bloc if égale a  : 2+2+2+3n+3+1 = 3n+10 
+
+d'où la complexité total de la fonction = 3n+10 => O(n)
+
+*/
+
+/***** mazal nvérifyi les complexités manich sur 100 % */
+
+/*****Complexité spatial*****/
+/**Comme on vérifie que la pile A et B sont vides ainsi on vérifie que la pile C est remplie dans l'ordre décroissant donc on réserve une espace mémoire
+pour les 3 piles de taille n (nombre de disques) ce qui implique que complexité spatiale = 3n => O(n)*/
+
+
+
 int main() {
     int n;
     do
@@ -240,9 +278,7 @@ int main() {
     printf("Saisir le nombre de disques : ");
     scanf("%d", &n);   
     } while (n<=0);
-
-    char T[((1<<n)-1)*2-1];
-    
+ 
     //l'initialisation des piles
     Pile p1, p2, p3;
     initPile(&p1, n);
@@ -261,7 +297,7 @@ int main() {
     
     //pour calculer le temp de la résolution 
     start=clock();   
-    resolutionIteratif(&p1, &p2, &p3, n,T);
+    resolutionIteratif(&p1, &p2, &p3, n);
     end=clock();
     float time=(float)(end-start)/CLOCKS_PER_SEC;
     printf("\t\tLe temps d'execution est : %f\n\n",time);
