@@ -48,14 +48,6 @@ void remplir(Pile *p, int n) {
     }
 }
 
-void afficherPiquets(Pile *p1, Pile *p2, Pile *p3) {
-    printf("A : ");
-    afficherPile(p1);
-    printf("B : ");
-    afficherPile(p2);
-    printf("C : ");
-    afficherPile(p3);
-}
 
 //la resolution des tours d'hanoi 
 void resolutionIteratif(Pile *p1, Pile *p2, Pile *p3, int n,char T[]) {
@@ -151,9 +143,6 @@ void resolutionIteratif(Pile *p1, Pile *p2, Pile *p3, int n,char T[]) {
             }
         }
         k=k+2;
-        printf("déplacement numéro :  %d \n", i+1); 
-        afficherPiquets(p1, p2, p3);
-        printf("-------------------\n");
     }
 }
 

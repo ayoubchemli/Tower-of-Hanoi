@@ -12,6 +12,7 @@
 #define DISK_HEIGHT 20
 #define MOVE_DELAY 30 // Delay in frames between moves
 
+int numMoves = 0; // Assign the desired value to this variable
 float timeComplexity = 0.0f; // Time complexity in seconds
 
 // Base properties
@@ -116,14 +117,14 @@ Color getRandomColor() {
 }
 
 // Function to draw the screen
+
+
 void DrawScreen() {
     ClearBackground(WHITE);
     DrawText("Tower of Hanoi", GetScreenWidth() / 2 - MeasureText("Tower of Hanoi", 80) / 2, 50, 80, DARKPURPLE);
 
     // Draw the horizontal rectangle with rounded corners
-    DrawRectangleRounded(
-        (Rectangle){ rectX, rectY, rectWidth, rectHeight },
-        roundness * fmax(rectWidth, rectHeight) / 2, 0, rectColor);
+    DrawRectangleRounded((Rectangle){ rectX, rectY, rectWidth, rectHeight }, roundness * fmax(rectWidth, rectHeight) / 2, 0, rectColor);
 
     // Draw the vertical rectangles
     int spacing = (rectWidth - 3 * vertRectWidth) / 6;
@@ -132,9 +133,14 @@ void DrawScreen() {
         DrawRectangle(vertRectX, rectY - vertRectHeight, vertRectWidth, vertRectHeight, vertRectColor);
         vertRectX += vertRectWidth + 2 * spacing;
     }
-     // Draw red text in the bottom left corner
-    DrawText("Time complexity in seconds: ", 10, GetScreenHeight() - 30, 20, RED);
-    DrawText(TextFormat("%.4f Sec", timeComplexity), MeasureText("Time complexity in seconds: ", 20) + 15, GetScreenHeight() - 30, 20, RED);
+
+    // Draw red text in the bottom left corner
+    DrawText("Time complexity in seconds: ", 10, GetScreenHeight() - 60, 20, RED);
+    DrawText(TextFormat("%.4f Sec", timeComplexity), MeasureText("Time complexity in seconds: ", 20) + 15, GetScreenHeight() - 60, 20, RED);
+
+    // Draw red text for number of moves
+    DrawText("Number of moves: ", 10, GetScreenHeight() - 30, 20, RED);
+    DrawText(TextFormat("%d", numMoves), MeasureText("Number of moves: ", 20) + 15, GetScreenHeight() - 30, 20, RED);
 }
 
 // Function to draw towers and disks
@@ -345,7 +351,7 @@ int main() {
     // char moves[] = {'A', 'B', 'A', 'C', 'B', 'C', 'A', 'B', 'C', 'A', 'C', 'B', 'A', 'B', 'A', 'C'};
     // int numMoves = sizeof(moves) / sizeof(moves[0]);
 
-    int numMoves = strlen(T);
+    numMoves = strlen(T);
 
     // Initialize towers A, B, and C with the number of disks and sizes
     Tower towers[3] = {
