@@ -21,17 +21,17 @@ int vide(Pile *p) {
 }
 
 int sommet(Pile *p) {
-    return p->pile[p->sommet];
+    return p->pile[p->sommet]; 
 }
 
 void empiler(Pile *p, int x) {
     
-    p->pile[++(p->sommet)] = x;
+    p->pile[++(p->sommet)] = x;// 2opé
 }
 
 int depiler(Pile *p) {
    
-    return p->pile[(p->sommet)--];
+    return p->pile[(p->sommet)--]; // 2opé
 }
 
 void afficherPile(Pile *p) {
@@ -62,7 +62,6 @@ void afficherPiquets(Pile *p1, Pile *p2, Pile *p3) {
 void resolutionIteratif(Pile *p1, Pile *p2, Pile *p3, int n) {
    int indic = 0;
   
-   
     // Parité de n
     if (n % 2 == 0) {
         indic = 1; // Si le nombre de disques est pair
@@ -79,21 +78,24 @@ void resolutionIteratif(Pile *p1, Pile *p2, Pile *p3, int n) {
         // n Paire
         if (indic == 1) {
             if (i % 3 == 0) {
-    
+                //B1
                 if (!vide(p1) && (vide(p2) || sommet(p1) < sommet(p2))) {
                     empiler(p2, depiler(p1));
                 } else {
                     empiler(p1, depiler(p2));
                 }
-            } else if (i % 3 == 1) {
-                
+            }
+            else //B2
+            //B2'
+            if (i % 3 == 1) {
                 if (!vide(p1) && (vide(p3) || sommet(p1) < sommet(p3))) {
                     empiler(p3, depiler(p1));
                 } else {
                     empiler(p1, depiler(p3));
                 }
-            }else {
-                
+            }
+            else /*B2''*/ {
+                  
                 if (!vide(p2) && (vide(p3) || sommet(p2) < sommet(p3))) {
                     empiler(p3, depiler(p2));
                 } else {
@@ -104,13 +106,13 @@ void resolutionIteratif(Pile *p1, Pile *p2, Pile *p3, int n) {
         // n Impair
         else {
             if (i % 3 == 0) {
-                
                 if (!vide(p1) && (vide(p3) || sommet(p1) < sommet(p3))) {
                     empiler(p3, depiler(p1));
                 } else {
                     empiler(p1, depiler(p3));
                 }
-            } else if (i % 3 == 1) {
+            } else
+             if (i % 3 == 1) {
                 
                 if (!vide(p1) && (vide(p2) || sommet(p1) < sommet(p2))) {
                     empiler(p2, depiler(p1));
@@ -126,13 +128,22 @@ void resolutionIteratif(Pile *p1, Pile *p2, Pile *p3, int n) {
                 }
             }
         }
-        printf("déplacement numéro :  %d \n", i+1); 
-        afficherPiquets(p1, p2, p3);
-        printf("-------------------\n");
+        {
+            //ki ta7seb complexité éviter ta7seb les affichages pisk yaklo lwe9t
+         printf("déplacement numéro :  %d \n", i+1); // dans le calucl de la complexité on calcule pas les instructions d'affichage
+      afficherPiquets(p1, p2, p3);
+     printf("-------------------\n");
+        }
     }
 }
+                  /**********Pseudo code***************/
 
-        /*Calcul de la complexité théorique de la fonction résolution itératif*/
+
+
+
+
+
+/*Calcul de la complexité théorique de la fonction résolution itératif*/
 /*
  int indic = 0 ;  -> 1 op (affectation)
  -------------------------------------------
@@ -164,46 +175,50 @@ void resolutionIteratif(Pile *p1, Pile *p2, Pile *p3, int n) {
  on remarque que les deux blocs sont équivalents dans le nombre d'instructions donc choisit l'un des deux blocs
  => calcul de la complexité du bloc if 
 
+
  if (indic == 1 ) => 1op (comparaison)
- on a 3 blocs , le bloc de if (i%3==0) , aprés le bloc else if (i%3==1),aprés le bloc else (i%3==2)
- tous les blocs ont le même nombre d'opérations , donc on choisit l'un des blocs
- => le bloc if (i%3==0)
+ on a 3 blocs , le bloc de if (i%3==0) , aprés le bloc else if (i%3==1),aprés le bloc else (i%3==2),aprés le bloc else
+ 
+ donc la complexité du bloc if (indic ==1) égale à la complexité de la condition if(i%3==0) + le max (B1,B2)=B2
+ dans B2 on choisit l'un des deux blocs B2' ou B2'' => B2'
 
 
- ---> calcul de la complexité du bloc if(i%3==0)
- if (i%3==0) -> 2op (le mod + la comparaison avec le zéro)
+---> calcul du complexité du Bloc B2'
+ ---> calcul de la complexité du bloc if(i%3==1)
+ if (i%3==1) -> 2op (le mod + la comparaison avec le zéro)
  on a deux blocs , le bloc if et le bloc else , les deux blocs ont le même nombre d'instructions 
  donc on choisit l'un des deux blocs => bloc if 
 
-  if (!vide(p1) && (vide(p2) || sommet(p1) < sommet(p2))) --> 
+  if (!vide(p1) && (vide(p3) || sommet(p1) < sommet(p3))) --> 
  1....sommet (p1) -> 1 op (on accede au sommet du pile p1 et on le retourne)
- 2....sommet (p2) -> 1 op (on accede au sommet du pile p2 et on le retourne)
- 3.... sommet (p1) < sommet(p2) -> 1op (comparaison)
- 4.... (vide (p2) <=> vide (p2)== 1) -> 2op (comparaison du sommet du pile avec le - 1 aprés comparaison du retour de fonction avec 1 )
+ 2....sommet (p3) -> 1 op (on accede au sommet du pile p3 et on le retourne)
+ 3.... sommet (p1) < sommet(p3) -> 1op (comparaison)
+ 4.... (vide (p3) <=> vide (p3)== 1) -> 2op (comparaison du sommet du pile avec le - 1 + le retour de la fonction )
  5....  4||3 -> 1 op (opération du ou)
- 6....(!vide(p2)<=>vide(p2)!=1) -> 2op (comparaison du sommet du pile avec le - 1 aprés comparaison du retour de fonction avec 1 )
+ 6....(!vide(p3)<=>vide(p3)!=1) -> 2op (comparaison du sommet du pile avec le - 1 + le retour de la fonction )
  7.... 6&&5 -> 1op (opération du et )
 
 
-  empiler(p2, depiler(p1)) -> 
-  dépiler(p1)-> 1op (accés a la pile et décrementation du sommet)
-  empiler(p2,dépiler(p1))-> 2op (accés a la pile et incrémentation du sommet + affectation du résultat de dépilement du p2)
+  empiler(p3, depiler(p1)) -> 
+  dépiler(p1)-> 2op (accés a la pile et décrementation du sommet)
+  empiler(p3,dépiler(p1))-> 2op (accés a la pile et incrémentation du sommet + affectation du résultat de dépilement du p2)
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-- le total = 1 + 3 + n+2 + 1 + 2^n + (2^(n+1))-2  + ((2^n)-1)*(1+2+1+1+1+2+1+2+1+1+2) = 5+n+(2^n)+2^(n+1)+15*(2^n)-15 = 2^(n+1) + 16*(2^n) - 10 +n = (2^n)*(18) - 10 + n-                 
+- le total = 1 + 3 + n+2 + 1 + 2^n + (2^(n+1))-2  + ((2^n)-1)*(1+2+2+1+1+1+2+1+2+1+2+2) = 5+n+(2^n)+2^(n+1)+24*(2^n)-24 = n+(2^n)*25+2^(n+1)-19= 27*(2^n)+n+19       
 - comme 2^n > n quelque soit n>=0 donc on garde seulement le plus grand coefficient qui est 2^n ce qui implique que la complexité égale à O(2^n)                        -
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
 */
 int pileDecroissante(Pile *p) {
-    int x = depiler(p);
-    while (p->sommet != -1) {
-        int next = depiler(p);
-        if (next < x) {
+    int x = depiler(p);//1op
+    while (p->sommet != -1) { 
+        int next = depiler(p);//2op de dépilement +1op de la vérification
+        if (next < x)// 1op 
+         {
             return -1;
         }
-        x = next;
+        x = next; // 1op
     }
-    return 1;
+    return 1; //1op
 }
 
 // la fonction de la vérification 
@@ -246,29 +261,32 @@ return 1;}
 3.... deux opération du et -> 2op
 4....calcul de la complexité de la fonction (pileDecroissante(&C))->
 ---int x = depiler(p) -> 1op (accés a la pile et décrementation du sommet)
----while (p->sommet!=-1) <=> while (!vide(p)) donc on a pas dépiler tous les n éléments de la pile ce qui implique que le nombre d'itérations égale à n 
+---while (p->sommet!=-1) <=> while (!vide(p)) donc on a  dépilé tous les n éléments de la pile ce qui implique que le nombre d'itérations égale à n 
 -> calcul de la complexité de la boucle while 
 (n+1) vérification de (p->sommet!=-1) 
-int next = dépiler(p) -> 1op * n 
+int next = dépiler(p) -> 2op * n de dépilement + n affectation -> 3n 
 le pire cas c'est que chaque fois le next > x donc :
+la vérification de next < x -> (1op *n)
 x = next -> 1op * n 
 return 1 -> 1op 
 
-=> le total = 1+n+1+n+n+1 = 3n+3 
+=> le total = n+1+3n+n+1+n = 6n+2
 
 5. return 1 ; -> 1op 
-donc la complexité du bloc if égale a  : 2+2+2+3n+3+1 = 3n+10 
+donc la complexité du bloc if égale a  : 2+2+2+6n+2+1 = 6n+9
 
-d'où la complexité total de la fonction = 3n+10 => O(n)
+d'où la complexité total de la fonction = 6n+9 => O(n)
 
 */
 
 /***** mazal nvérifyi les complexités manich sur 100 % */
 
+//nrmlm kemelt m3a complexité temporelle theo 
 /*****Complexité spatial*****/
 /**Comme on vérifie que la pile A et B sont vides ainsi on vérifie que la pile C est remplie dans l'ordre décroissant donc on réserve une espace mémoire
 pour les 3 piles de taille n (nombre de disques) ce qui implique que complexité spatiale = 3n => O(n)*/
 
+//fiha nadar
 
 
 int main() {
@@ -301,7 +319,7 @@ int main() {
     end=clock();
     float time=(float)(end-start)/CLOCKS_PER_SEC;
     printf("\t\tLe temps d'execution est : %f\n\n",time);
-    
+    start=clock();
     //la vérification de la résolution 
     if (verif_iterative(p1,p2,p3)==1)
     {
@@ -311,5 +329,9 @@ int main() {
     {
     printf("les tours de hanoi ne  sont pas  résolues , vérification terminée.");
     }
+    end=clock();
+    float time2=(float)(end-start)/CLOCKS_PER_SEC;
+    printf("\nLe temps de vérification est : %f\n\n",time2);
     return 0;
+
 }
