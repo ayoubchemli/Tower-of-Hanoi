@@ -130,9 +130,9 @@ void resolutionIteratif(Pile *p1, Pile *p2, Pile *p3, int n) {
         }
         {
             //ki ta7seb complexité éviter ta7seb les affichages pisk yaklo lwe9t
-         printf("déplacement numéro :  %d \n", i+1); // dans le calucl de la complexité on calcule pas les instructions d'affichage
-      afficherPiquets(p1, p2, p3);
-     printf("-------------------\n");
+        // printf("déplacement numéro :  %d \n", i+1); // dans le calucl de la complexité on calcule pas les instructions d'affichage
+      //afficherPiquets(p1, p2, p3);
+    // printf("-------------------\n");
         }
     }
 }
@@ -185,7 +185,7 @@ void resolutionIteratif(Pile *p1, Pile *p2, Pile *p3, int n) {
 
 ---> calcul du complexité du Bloc B2'
  ---> calcul de la complexité du bloc if(i%3==1)
- if (i%3==1) -> 2op (le mod + la comparaison avec le zéro)
+ if (i%3==1) -> 2op (le mod + la comparaison avec le un )
  on a deux blocs , le bloc if et le bloc else , les deux blocs ont le même nombre d'instructions 
  donc on choisit l'un des deux blocs => bloc if 
 
@@ -209,7 +209,7 @@ void resolutionIteratif(Pile *p1, Pile *p2, Pile *p3, int n) {
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
 */
 int pileDecroissante(Pile *p) {
-    int x = depiler(p);//1op
+    int x = depiler(p);//1op, 
     while (p->sommet != -1) { 
         int next = depiler(p);//2op de dépilement +1op de la vérification
         if (next < x)// 1op 
@@ -282,11 +282,17 @@ d'où la complexité total de la fonction = 6n+9 => O(n)
 /***** mazal nvérifyi les complexités manich sur 100 % */
 
 //nrmlm kemelt m3a complexité temporelle theo 
-/*****Complexité spatial*****/
-/**Comme on vérifie que la pile A et B sont vides ainsi on vérifie que la pile C est remplie dans l'ordre décroissant donc on réserve une espace mémoire
-pour les 3 piles de taille n (nombre de disques) ce qui implique que complexité spatiale = 3n => O(n)*/
 
-//fiha nadar
+/*****Complexité spatial*****/
+//1.vérification
+/**Comme on vérifie que la pile A et B sont vides ainsi on vérifie que la pile C est remplie dans l'ordre décroissant donc on réserve une espace mémoire
+pour les 3 piles de taille n (nombre de disques)+ la taille réservé pour la variable next et x (dans la fonction piledécroissante) ce qui implique que complexité spatiale = 3n+2 => O(n)
+donc on octets c'est (3n+2)*4octets car chaque entier est representé en 4octets*/ 
+//2.exécution
+/**On fait les déplacements entre les 3 piquets donc on réserve une espace mémoire pour les 3 piles de taille n + la variable indic + la variable n +la variable i +la variable déplacementMin =>
+ 3n+1+1+1+1 = 3n+4 => O(n) en octets c'est (3n+4)*4octets car un entier est représenté en 4octets */
+
+
 
 
 int main() {
@@ -305,15 +311,15 @@ int main() {
 
 
     remplir(&p1, n);// remplissage du premier piquet par les n disques 
-    printf("-----------------------------------------\n");
-    printf("l'état des piquets avant le déplacement : \n");
-    printf("-----------------------------------------\n");
-    afficherPiquets(&p1,&p2,&p3);
-    printf("-----------------------------------------\n");
-    printf("l'état des piquets aprés le déplacement : \n");
+   // printf("-----------------------------------------\n");
+   // printf("l'état des piquets avant le déplacement : \n");
+   // printf("-----------------------------------------\n");
+  //  afficherPiquets(&p1,&p2,&p3);
+  //  printf("-----------------------------------------\n");
+  //  printf("l'état des piquets aprés le déplacement : \n");
     // le plus grand disque a comme numéro n , aprés le disque le moins grand c'est  n-1 et ainsi de suite ...
     
-    //pour calculer le temp de la résolution 
+    //pour calculer le temps de la résolution 
     start=clock();   
     resolutionIteratif(&p1, &p2, &p3, n);
     end=clock();
@@ -323,7 +329,7 @@ int main() {
     //la vérification de la résolution 
     if (verif_iterative(p1,p2,p3)==1)
     {
-    printf("les tours de hanoi sont résolues , vérification terminée.");    
+    printf("les tours de hanoi sont résolues , vérification terminée."); 
     }
     else
     {
