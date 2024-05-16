@@ -56,7 +56,7 @@ void afficherPiquets(Pile *p1, Pile *p2, Pile *p3) {
     printf("C : ");
     afficherPile(p3);
 }
-/*****Présentation de l'algorithme de la résolution*******/
+/*****Implementation de l'algorithme de la résolution***********/
 
 //la resolution des tours d'hanoi 
 void resolutionIteratif(Pile *p1, Pile *p2, Pile *p3, int n) {
@@ -69,8 +69,8 @@ void resolutionIteratif(Pile *p1, Pile *p2, Pile *p3, int n) {
         indic = -1; // Si le nombre de disques est impair
     }
 
-    // Calcul du nb de déplacement min
-    int deplacementMin = (1<<n)-1;//le nombre de déplacement qui seront effectués (2^n-1)
+
+    int deplacementMin = (1<<n)-1;//le nombre de déplacements qui seront effectués (2^n-1)
 
     printf("-----------------------------------------\n");
 
@@ -129,15 +129,13 @@ void resolutionIteratif(Pile *p1, Pile *p2, Pile *p3, int n) {
             }
         }
         {
-            //ki ta7seb complexité éviter ta7seb les affichages pisk yaklo lwe9t
         // printf("déplacement numéro :  %d \n", i+1); // dans le calucl de la complexité on calcule pas les instructions d'affichage
       //afficherPiquets(p1, p2, p3);
     // printf("-------------------\n");
         }
     }
 }
-                  /**********Pseudo code***************/
-
+                  
 
 
 
@@ -235,7 +233,7 @@ int verif_iterative(Pile A,Pile B,Pile C)
 }
 
 
-/***********pseudo code***************/
+/***********Pseudo code de la vérification***************/
 /*
 Fonction verif_iterative(Pile A,Pile B,Pile C):entier
 
@@ -250,7 +248,7 @@ Fin.
 
 */
 
-/*******Complexité théorique************/
+/*******Complexité théorique de la fonction verif_iterative************/
 /*Calculons la complexité du bloc if else 
 if (vide(&A)&&vide(&B)&&pileDecroissante(&C))
 {
@@ -277,11 +275,9 @@ donc la complexité du bloc if égale a  : 2+2+2+6n+2+1 = 6n+9
 
 d'où la complexité total de la fonction = 6n+9 => O(n)
 
-*/
 
-/***** mazal nvérifyi les complexités manich sur 100 % */
 
-//nrmlm kemelt m3a complexité temporelle theo 
+
 
 /*****Complexité spatial*****/
 //1.vérification
