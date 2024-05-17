@@ -72,7 +72,7 @@ void resolutionIteratif(Pile *p1, Pile *p2, Pile *p3, int n) {
 
     int deplacementMin = (1<<n)-1;//le nombre de déplacements qui seront effectués (2^n-1)
 
-    printf("-----------------------------------------\n");
+  //  printf("-----------------------------------------\n");
 
     for (int i = 0; i < deplacementMin; i++) {
         // n Paire
@@ -129,9 +129,9 @@ void resolutionIteratif(Pile *p1, Pile *p2, Pile *p3, int n) {
             }
         }
         {
-        // printf("déplacement numéro :  %d \n", i+1); // dans le calucl de la complexité on calcule pas les instructions d'affichage
-      //afficherPiquets(p1, p2, p3);
-    // printf("-------------------\n");
+      //   printf("déplacement numéro :  %d \n", i+1); // dans le calucl de la complexité on calcule pas les instructions d'affichage
+    //  afficherPiquets(p1, p2, p3);
+  //   printf("-------------------\n");
         }
     }
 }
@@ -307,23 +307,28 @@ int main() {
 
 
     remplir(&p1, n);// remplissage du premier piquet par les n disques 
-   // printf("-----------------------------------------\n");
+  //  printf("-----------------------------------------\n");
    // printf("l'état des piquets avant le déplacement : \n");
    // printf("-----------------------------------------\n");
-  //  afficherPiquets(&p1,&p2,&p3);
+   // afficherPiquets(&p1,&p2,&p3);
   //  printf("-----------------------------------------\n");
   //  printf("l'état des piquets aprés le déplacement : \n");
     // le plus grand disque a comme numéro n , aprés le disque le moins grand c'est  n-1 et ainsi de suite ...
     
     //pour calculer le temps de la résolution 
-    start=clock();   
+   // start=clock();   
     resolutionIteratif(&p1, &p2, &p3, n);
-    end=clock();
-    float time=(float)(end-start)/CLOCKS_PER_SEC;
-    printf("\t\tLe temps d'execution est : %f\n\n",time);
-    start=clock();
-    //la vérification de la résolution 
-    if (verif_iterative(p1,p2,p3)==1)
+   // end=clock();
+  //  float time=(float)(end-start)/CLOCKS_PER_SEC;
+  //  printf("\t\tLe temps d'execution est : %f\n\n",time);
+   // start=clock();
+
+   struct timespec start, end;
+    long long elapsed_time;
+
+clock_gettime(CLOCK_MONOTONIC, &start);
+
+if (verif_iterative(p1,p2,p3)==1)
     {
     printf("les tours de hanoi sont résolues , vérification terminée."); 
     }
@@ -331,9 +336,22 @@ int main() {
     {
     printf("les tours de hanoi ne  sont pas  résolues , vérification terminée.");
     }
-    end=clock();
-    float time2=(float)(end-start)/CLOCKS_PER_SEC;
+    clock_gettime(CLOCK_MONOTONIC, &end);
+    elapsed_time = (end.tv_sec - start.tv_sec) * 1000000000LL + (end.tv_nsec - start.tv_nsec);
+    printf("\nle temps de la vérification est : %lld",elapsed_time);
+    //la vérification de la résolution 
+  /* if (verif_iterative(p1,p2,p3)==1)
+    {
+    printf("les tours de hanoi sont résolues , vérification terminée."); 
+    }
+    else
+    {
+    printf("les tours de hanoi ne  sont pas  résolues , vérification terminée.");
+    }
+  //  end=clock();
+ //   float time2=(float)(end-start)/CLOCKS_PER_SEC;
     printf("\nLe temps de vérification est : %f\n\n",time2);
+    */
     return 0;
 
 }
