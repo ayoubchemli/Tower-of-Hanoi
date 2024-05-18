@@ -71,6 +71,55 @@ void moveDisk(Tower *sourceTower, Tower *destTower, Sound moveSound) {
     
 }
 
+void verifyTowerOfHanoi(Tower *finalTower, Tower towers[3]) {
+    Sound redDiskSound = LoadSound("reddisk.ogg");
+    Sound correct = LoadSound("correct.wav");
+
+    int delay = 20; // Delay in frames between disk color changes
+    int resetDelay = 40; // Delay in frames before resetting the disk color
+
+    // Store the original colors of the disks
+    Color originalColors[30];
+    for (int i = 0; i < finalTower->numDisks; i++) {
+        originalColors[i] = finalTower->disks[i].color;
+    }
+
+    for (int i = 0; i < finalTower->numDisks; i++) {
+        finalTower->disks[i].color = RED; // Change the disk color to red
+        PlaySound(redDiskSound); // Play the sound effect
+
+        for (int j = 0; j < delay; j++) {
+            BeginDrawing();
+            ClearBackground(RAYWHITE);
+            drawTowersAndDisks(towers); // Draw the towers with the updated disk color
+            DrawText("Verification algorithm in process...", GetScreenWidth() / 2 - MeasureText("Verification algorithm in process...", 40) / 2, rectY + rectHeight + 20, 40, DARKPURPLE);
+            EndDrawing();
+        }
+
+        // Reset the disk color after a delay
+        for (int j = 0; j < resetDelay; j++) {
+            BeginDrawing();
+            ClearBackground(RAYWHITE);
+            drawTowersAndDisks(towers); // Draw the towers with the original disk color
+            EndDrawing();
+        }
+
+        finalTower->disks[i].color = originalColors[i]; // Restore the original color
+    }
+
+    int textY = rectY + rectHeight + 20; // Adjust the offset as needed
+
+    // Wait for some time before closing the window
+    PlaySound(correct); // Play the sound effect
+    for (int i = 0; i < 250; i++) {
+        BeginDrawing();
+        ClearBackground(RAYWHITE);
+        drawTowersAndDisks(towers);
+        DrawText("The solution is correct!", GetScreenWidth() / 2 - MeasureText("The solution is correct!", 40) / 2, textY, 40, GREEN);
+        EndDrawing();
+    }
+}
+
 // Function to solve Tower of Hanoi problem given an array of moves
 void solveTowerOfHanoi(char moves[], int numMoves, Tower towers[3]) {
     // Load the sound effect
@@ -108,6 +157,8 @@ void solveTowerOfHanoi(char moves[], int numMoves, Tower towers[3]) {
             EndDrawing();
         }
     }
+    // Perform the verification sequence
+    verifyTowerOfHanoi(&towers[2],towers);
 }
 
 // Function to generate a random color
@@ -178,7 +229,6 @@ int GetNumberFromUser()
 {
     int number = -1; // Initialize with an invalid value
     char inputText[10] = "";
-    bool inputMode = false;
     bool validInput = false;
     bool showErrorMessage = false;
 
@@ -190,60 +240,52 @@ int GetNumberFromUser()
     while (!WindowShouldClose() && !validInput)
     {
         // Update
-        if (inputMode)
+    
+        int key = GetKeyPressed();
+        if ((key >= 48 && key <= 57) || IsKeyPressed(KEY_BACKSPACE)) // Check if input is a number or backspace
         {
-            int key = GetKeyPressed();
-            if ((key >= 48 && key <= 57) || IsKeyPressed(KEY_BACKSPACE)) // Check if input is a number or backspace
+            if (!IsKeyPressed(KEY_BACKSPACE)) // If input is a number, append it to the string
             {
-                if (!IsKeyPressed(KEY_BACKSPACE)) // If input is a number, append it to the string
-                {
-                    int length = TextLength(inputText);
-                    if (length < 2) inputText[length] = (char)key;
-                    inputText[length + 1] = '\0';
-                }
-                else // If input is backspace, remove the last character from the string
-                {
-                    int length = TextLength(inputText);
-                    if (length > 0) inputText[length - 1] = '\0';
-                }
+                int length = TextLength(inputText);
+                if (length < 2) inputText[length] = (char)key;
+                inputText[length + 1] = '\0';
             }
+            else // If input is backspace, remove the last character from the string
+            {
+                int length = TextLength(inputText);
+                if (length > 0) inputText[length - 1] = '\0';
+            }
+        }
 
-            if (IsKeyPressed(KEY_ENTER))
-            {
-                number = TextToInteger(inputText);
-                if (number >= 0 && number <= 15)
-                {
-                    validInput = true;
-                }
-                else
-                {
-                    showErrorMessage = true;
-                }
-                inputText[0] = '\0'; // Clear the input text
-            }
-        }
-        else
+        if (IsKeyPressed(KEY_ENTER))
         {
-            if (IsKeyPressed(KEY_ENTER)) inputMode = true;
+            number = TextToInteger(inputText);
+            if (number >= 1 && number <= 15)
+            {
+                validInput = true;
+            }
+            else
+            {
+                showErrorMessage = true;
+            }
+            
+            inputText[0] = '\0'; // Clear the input text
         }
+    
 
         // Draw
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
-        if (inputMode)
-        {
-            DrawText("Enter a number between 0 and 15:", 20, 20, 20, GRAY);
-            DrawText(inputText, 20, 60, 40, BLACK);
-        }
-        else
-        {
-            DrawText("Press ENTER to input a number ", 20, 20, 20, GRAY);
-        }
+    
+        DrawText("Enter a number between 1 and 15:", 20, 20, 20, GRAY);
+        DrawText(inputText, 20, 60, 40, BLACK);
+    
+     
 
         if (showErrorMessage)
         {
-            DrawText("Invalid number! Enter a value between 0 and 15.", 20, 100, 20, RED);
+            DrawText("Invalid number! Enter a value between 1 and 15.", 20, 100, 20, RED);
             showErrorMessage = false; // Reset the flag after displaying the error message
             int delayCounter = 0; // Initialize a delay counter
             while (delayCounter < 60) // Delay for 1 second (60 frames at 60 FPS)
@@ -252,7 +294,7 @@ int GetNumberFromUser()
                 EndDrawing();
                 BeginDrawing();
                 ClearBackground(RAYWHITE);
-                DrawText("Invalid number! Enter a value between 0 and 15.", 20, 100, 20, RED);
+                DrawText("Invalid number! Enter a value between 1 and 15.", 20, 100, 20, RED);
             }
         }
 
