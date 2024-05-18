@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "raylib.h"
 #include <math.h>
-#include "resolution.c"
+#include "recursive.c"
 #include <string.h>
 #include <time.h>
 
@@ -14,6 +14,7 @@
 
 int numMoves = 0; // Assign the desired value to this variable
 float timeComplexity = 0.0f; // Time complexity in seconds
+int numDisks = 0; // Number of disks on the first tower 
 
 // Base properties
 int rectX = 100;
@@ -26,6 +27,9 @@ float roundness = 0.2f;
 int vertRectWidth = 25;
 int vertRectHeight = 350;
 Color vertRectColor = DARKPURPLE;
+
+struct timespec start1 , end1;
+long long elapsed_time;
 
 // Disk struct
 typedef struct {
@@ -40,7 +44,7 @@ typedef struct {
 typedef struct {
     char name; // Tower name (A, B, C)
     int numDisks; // Number of disks on the tower
-    Disk disks[10]; // Array of disks on the tower (maximum 10 disks)
+    Disk disks[30]; // Array of disks on the tower (maximum 10 disks)
 } Tower;
 
 // Function prototypes
@@ -119,8 +123,11 @@ Color getRandomColor() {
 // Function to draw the screen
 
 
+
+
+
 void DrawScreen() {
-    ClearBackground(WHITE);
+    ClearBackground(RAYWHITE);
     DrawText("Tower of Hanoi", GetScreenWidth() / 2 - MeasureText("Tower of Hanoi", 80) / 2, 50, 80, DARKPURPLE);
 
     // Draw the horizontal rectangle with rounded corners
@@ -135,12 +142,16 @@ void DrawScreen() {
     }
 
     // Draw red text in the bottom left corner
-    DrawText("Time complexity in seconds: ", 10, GetScreenHeight() - 60, 20, RED);
-    DrawText(TextFormat("%.4f Sec", timeComplexity), MeasureText("Time complexity in seconds: ", 20) + 15, GetScreenHeight() - 60, 20, RED);
+    DrawText("Time complexity in milliSeconds: ", 10, GetScreenHeight() - 60, 20, RED);
+    DrawText(TextFormat("%.4f milSec", timeComplexity), MeasureText("Time complexity in milliSeconds: ", 20) + 15, GetScreenHeight() - 60, 20, RED);
 
     // Draw red text for number of moves
     DrawText("Number of moves: ", 10, GetScreenHeight() - 30, 20, RED);
     DrawText(TextFormat("%d", numMoves), MeasureText("Number of moves: ", 20) + 15, GetScreenHeight() - 30, 20, RED);
+
+    // Draw red text for number of disks in the bottom-right corner
+    int textWidth = MeasureText(TextFormat("Number of disks: %d", numDisks), 20);
+    DrawText(TextFormat("Number of disks: %d", numDisks), GetScreenWidth() - textWidth - 10, GetScreenHeight() - 30, 20, RED);
 }
 
 // Function to draw towers and disks
@@ -200,7 +211,7 @@ int GetNumberFromUser()
             if (IsKeyPressed(KEY_ENTER))
             {
                 number = TextToInteger(inputText);
-                if (number >= 0 && number <= 10)
+                if (number >= 0 && number <= 15)
                 {
                     validInput = true;
                 }
@@ -222,7 +233,7 @@ int GetNumberFromUser()
 
         if (inputMode)
         {
-            DrawText("Enter a number between 0 and 10:", 20, 20, 20, GRAY);
+            DrawText("Enter a number between 0 and 15:", 20, 20, 20, GRAY);
             DrawText(inputText, 20, 60, 40, BLACK);
         }
         else
@@ -232,7 +243,7 @@ int GetNumberFromUser()
 
         if (showErrorMessage)
         {
-            DrawText("Invalid number! Enter a value between 0 and 10.", 20, 100, 20, RED);
+            DrawText("Invalid number! Enter a value between 0 and 15.", 20, 100, 20, RED);
             showErrorMessage = false; // Reset the flag after displaying the error message
             int delayCounter = 0; // Initialize a delay counter
             while (delayCounter < 60) // Delay for 1 second (60 frames at 60 FPS)
@@ -241,7 +252,7 @@ int GetNumberFromUser()
                 EndDrawing();
                 BeginDrawing();
                 ClearBackground(RAYWHITE);
-                DrawText("Invalid number! Enter a value between 0 and 10.", 20, 100, 20, RED);
+                DrawText("Invalid number! Enter a value between 0 and 15.", 20, 100, 20, RED);
             }
         }
 
@@ -303,15 +314,40 @@ void GetUserOption(Pile *p1, Pile *p2, Pile *p3, int n, char T[])
     {
     case 1:
         printf("Option 1 selected\n");
-        start=clock(); 
+        // start=clock(); 
+        // resolutionIteratif(p1, p2, p3, n,T);
+        // end=clock();
+        // timeComplexity=(float)((end-start) * 1000 /CLOCKS_PER_SEC);
+        // printf("Time complexity in milliSeconds: %.4f\n", timeComplexity);
+
+        
+        clock_gettime(CLOCK_MONOTONIC, &start1);
+
         resolutionIteratif(p1, p2, p3, n,T);
-        end=clock();
-        timeComplexity=(float)(end-start)/CLOCKS_PER_SEC;
-        printf("Time complexity in seconds: %.4f\n", timeComplexity);
+
+        clock_gettime(CLOCK_MONOTONIC, &end1);
+
+        elapsed_time = (end1.tv_sec - start1.tv_sec) * 1000000000LL + (end1.tv_nsec - start1.tv_nsec);
+        timeComplexity = (float)elapsed_time / 1000000.0; // Time complexity in milliseconds
 
         break;
     case 2:
         printf("Option 2 selected\n");
+        // start=clock(); 
+        // hanoi(n,'A','B','C',T);
+        // end=clock();
+        // timeComplexity=(float)((end-start)  * 1000 /CLOCKS_PER_SEC);
+        // printf("Time complexity in milliSeconds: %.4f\n", timeComplexity );
+
+        clock_gettime(CLOCK_MONOTONIC, &start1);
+
+        resolutionRecursive(n,'A','B','C',T);
+
+        clock_gettime(CLOCK_MONOTONIC, &end1);
+
+        elapsed_time = (end1.tv_sec - start1.tv_sec) * 1000000000LL + (end1.tv_nsec - start1.tv_nsec);
+        timeComplexity = (float)elapsed_time / 1000000.0; // Time complexity in milliseconds
+
         break;
     }
 
@@ -321,7 +357,7 @@ void GetUserOption(Pile *p1, Pile *p2, Pile *p3, int n, char T[])
 int main() {
 
     
-    int numDisks = GetNumberFromUser();
+    numDisks = GetNumberFromUser();
     printf("User entered: %d\n", numDisks);
 
     
@@ -351,7 +387,7 @@ int main() {
     // char moves[] = {'A', 'B', 'A', 'C', 'B', 'C', 'A', 'B', 'C', 'A', 'C', 'B', 'A', 'B', 'A', 'C'};
     // int numMoves = sizeof(moves) / sizeof(moves[0]);
 
-    numMoves = strlen(T);
+    numMoves = strlen(T) / 2;
 
     // Initialize towers A, B, and C with the number of disks and sizes
     Tower towers[3] = {
@@ -364,17 +400,18 @@ int main() {
     int maxDiskWidth = 280;
     int diskWidth = maxDiskWidth;
     int diskHeight = 30;
+    int widthDifference = maxDiskWidth / (numDisks + 1); // Width difference between disks
     for (int i = 0; i < numDisks; i++) {
         towers[0].disks[i].width = diskWidth;
         towers[0].disks[i].height = diskHeight;
         towers[0].disks[i].roundness = 0.9f;
         towers[0].disks[i].color = getRandomColor();
         towers[0].disks[i].position = (Vector2){200, 570 - i * diskHeight};
-        diskWidth -= 30; // Decrease the width for the next disk
+        diskWidth -= widthDifference; // Decrease the width for the next disk
     }
 
     // Solve Tower of Hanoi problem
-    solveTowerOfHanoi(T, numMoves, towers);
+    solveTowerOfHanoi(T, numMoves * 2, towers);
 
     // Main game loop
     while (!WindowShouldClose()) {
