@@ -208,7 +208,7 @@ n+5+21*2^n -18 = 21* 2^n + n -13
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
 */
 int pileDecroissante(Pile *p) {
-    int x = depiler(p);//1op, 
+    int x = depiler(p);//3op, 
     while (p->sommet != -1) { 
         int next = depiler(p);//2op de dépilement +1op de la vérification
         if (next < x)// 1op 
@@ -258,8 +258,10 @@ return 1;}
 1.... (vide (&A) <=> vide (&A)== 1) -> 2op (comparaison du sommet du pile avec le - 1 aprés comparaison du retour de fonction avec 1 )
 2.... (vide(&B) <=> vide (&B)== 1) -> 2op (comparaison du sommet du pile avec le - 1 aprés comparaison du retour de fonction avec 1 )
 3.... deux opération du et -> 2op
+
+
 4....calcul de la complexité de la fonction (pileDecroissante(&C))->
----int x = depiler(p) -> 1op (accés a la pile et décrementation du sommet)
+---int x = depiler(p) -> 3op ( décrementation du sommet + retrun + affectation )
 ---while (p->sommet!=-1) <=> while (!vide(p)) donc on a  dépilé tous les n éléments de la pile ce qui implique que le nombre d'itérations égale à n 
 -> calcul de la complexité de la boucle while 
 (n+1) vérification de (p->sommet!=-1) 
@@ -267,14 +269,16 @@ int next = dépiler(p) -> 2op * n de dépilement + n affectation -> 3n
 le pire cas c'est que chaque fois le next > x donc :
 la vérification de next < x -> (1op *n)
 x = next -> 1op * n 
+
+
 return 1 -> 1op 
 
-=> le total = n+1+3n+n+1+n = 6n+2
+=> le total = 3+n+1+3n+n+1+n = 6n+5
 
 5. return 1 ; -> 1op 
-donc la complexité du bloc if égale a  : 2+2+2+6n+2+1 = 6n+9
+donc la complexité du bloc if égale a  : 2+2+2+6n+5+1 = 6n+12
 
-d'où la complexité total de la fonction = 6n+9 => O(n)
+d'où la complexité total de la fonction = 6n+12 => O(n)
 
 
 
