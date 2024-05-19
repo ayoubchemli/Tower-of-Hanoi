@@ -255,8 +255,8 @@ if (vide(&A)&&vide(&B)&&pileDecroissante(&C))
 {
 return 1;}
 ->
-1.... (vide (&A) <=> vide (&A)== 1) -> 3op (comparaison du sommet du pile avec le - 1 aprés comparaison du retour de fonction avec 1 + comparaison avec 1  )
-2.... (vide(&B) <=> vide (&B)== 1) -> 3op (comparaison du sommet du pile avec le - 1 aprés comparaison du retour de fonction avec 1 + comparaison avec 1  )
+1.... (vide (&A) <=> vide (&A)== 1) -> 3op (comparaison du sommet du pile avec le - 1 +  retour de fonction  + comparaison avec 1  )
+2.... (vide(&B) <=> vide (&B)== 1) -> 3op (comparaison du sommet du pile avec le - 1 + retour de fonction  + comparaison avec 1  )
 3.... deux opération du et -> 2op
 
 
