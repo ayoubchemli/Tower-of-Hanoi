@@ -191,9 +191,9 @@ void resolutionIteratif(Pile *p1, Pile *p2, Pile *p3, int n) {
  1....sommet (p1) -> 1 op (on accede au sommet du pile p1 et on le retourne)
  2....sommet (p3) -> 1 op (on accede au sommet du pile p3 et on le retourne)
  3.... sommet (p1) < sommet(p3) -> 1op (comparaison)
- 4.... (vide (p3) <=> vide (p3)== 1) -> 2op (comparaison du sommet du pile avec le - 1 + le retour de la fonction )
+ 4.... (vide (p3) <=> vide (p3)== 1) -> 3op (comparaison du sommet du pile avec le - 1 + le retour de la fonction + comparaison avec 1 )
  5....  4||3 -> 1 op (opération du ou)
- 6....(!vide(p3)<=>vide(p3)!=1) -> 2op (comparaison du sommet du pile avec le - 1 + le retour de la fonction )
+ 6....(!vide(p3)<=>vide(p3)!=1) -> 3op (comparaison du sommet du pile avec le - 1 + le retour de la fonction + comparaison avec 1 )
  7.... 6&&5 -> 1op (opération du et )
 
 
@@ -202,8 +202,8 @@ void resolutionIteratif(Pile *p1, Pile *p2, Pile *p3, int n) {
   empiler(p3,dépiler(p1))-> 2op (accés a la pile et incrémentation du sommet + affectation du résultat de dépilement du p2)
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-- le total = 1 + 3 + n+2 + 1 + 2^n + (2^(n+1))-2  + ((2^n)-1)*(1+2+2+1+1+1+2+1+2+1+2+2) = n+5+2^n+(2^(n+1)) + ( (2^n)-1 ) *(18)) = n+5+2^n+(2^n)*2 + (18*2^n -18) = 
-n+5+21*2^n -18 = 21* 2^n + n -13    
+- le total = 1 + 3 + n+2 + 1 + 2^n + (2^(n+1))-2  + ((2^n)-1)*(1+2+2+1+1+1+3+1+3+1+2+2) = n+5+2^n+(2^(n+1)) + ( (2^n)-1 ) *(20)) = n+5+2^n+(2^n)*2 + (20*2^n -20) = n+5+2^n(1+20+2)-20
+= 23*2^n+n-15
 - comme 2^n > n quelque soit n>=0 donc on garde seulement le plus grand coefficient qui est 2^n ce qui implique que la complexité égale à O(2^n)                        -
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
 */
@@ -255,8 +255,8 @@ if (vide(&A)&&vide(&B)&&pileDecroissante(&C))
 {
 return 1;}
 ->
-1.... (vide (&A) <=> vide (&A)== 1) -> 2op (comparaison du sommet du pile avec le - 1 aprés comparaison du retour de fonction avec 1 )
-2.... (vide(&B) <=> vide (&B)== 1) -> 2op (comparaison du sommet du pile avec le - 1 aprés comparaison du retour de fonction avec 1 )
+1.... (vide (&A) <=> vide (&A)== 1) -> 3op (comparaison du sommet du pile avec le - 1 aprés comparaison du retour de fonction avec 1 + comparaison avec 1  )
+2.... (vide(&B) <=> vide (&B)== 1) -> 3op (comparaison du sommet du pile avec le - 1 aprés comparaison du retour de fonction avec 1 + comparaison avec 1  )
 3.... deux opération du et -> 2op
 
 
@@ -276,9 +276,9 @@ return 1 -> 1op
 => le total = 3+n+1+3n+n+1+n = 6n+5
 
 5. return 1 ; -> 1op 
-donc la complexité du bloc if égale a  : 2+2+2+6n+5+1 = 6n+12
+donc la complexité du bloc if égale a  : 3+3+2+6n+5+1 = 6n+14
 
-d'où la complexité total de la fonction = 6n+12 => O(n)
+d'où la complexité total de la fonction = 6n+14 => O(n)
 
 
 
