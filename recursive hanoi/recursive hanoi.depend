@@ -1,6 +1,0 @@
-# depslib dependency file v1.0
-1711120484 source:c:\users\asus\desktop\2nd-year-project\recursive hanoi\main.c
-	<stdio.h>
-	<stdlib.h>
-	<stdbool.h>
-
