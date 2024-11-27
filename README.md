@@ -82,7 +82,7 @@ To compile and run the project, you will need:
 
 ## Credits
 
-This project was created by [Your Name/Team Name]. Special thanks to the Raylib community for providing an excellent library for graphics.
+This project was deriged by me CHEMLI Ayoub. Special thanks to the Raylib community for providing an excellent library for graphics.
 
 ## License
 
